@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap </title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        var dt = new Date($.now());
+        var time = dt.toLocaleString();
+        $(document).ready(function () {
+            //For notification div for dropdown
+            $("#notificationLink").click(function () {
+                $("#notificationContainer").fadeToggle(300);
+                return false;
+            });
+            $("#notificationContainer").click(function () {
+                $("#notificationContainer").show();
+            });
+
+            $("#notificationContainer").click(function () {
+                return false
+            });
+            //Form button click trigger events
+            $("#btn1").click(function () {
+                function myFunction() {
+                    $('#fieldsmatch').fadeIn(1000);
+                    setTimeout(function () {
+                        $('#fieldsmatch').fadeOut(1000);
+                    }, 5000);
+                }
+                function myFunction1() {
+                    $('#fieldsmatch1').fadeIn(1000);
+                    setTimeout(function () {
+                        $('#fieldsmatch1').fadeOut(1000);
+                    }, 5000);
+                }
+                //Check Validity for input fields return false in case of empty fields
+                if ($.trim($("#usr").val()) === "" || $.trim($("#exampleFormControlTextarea1").val()) === "") {
+                    myFunction();
+                    return false;
+                }
+                //prepend in case of condition is true
+                else if ($.trim($("#usr").val()) || $.trim($("#exampleFormControlTextarea1").val())) {
+                    myFunction1();
+                    var message = $('#exampleFormControlTextarea1').val();
+                    var name = $('#usr').val();
+                    var b = $(".notifications").prepend('<li class="addMore">' + name + '&nbsp;' + message + "<br>" + time + '</li>');
+                    $('#exampleFormControlTextarea1').val('');
+                    $('#usr').val('');
+
+                }
+
+            });
+            //show prepended each li of .addMore on individual click in a modal body 
+            $("#notificationsBody").on("click", ".addMore", function () {
+                $('#exampleModal').modal('toggle');
+                $('#exampleModal').modal('show');
+                $('#exampleModal').modal('hide');
+
+                $(this).each(function () {
+                    var item = $(this).html();
+                    $("#showNotification").html(item);
+                });
+            });
+            // for showing all entered notifications in a modal box
+            $(".fullNotifications").click(function (e) {
+                e.preventDefault();
+                $('#exampleModal').modal('toggle');
+                $('#exampleModal').modal('show');
+                $('#exampleModal').modal('hide');
+                $("#notificationsBody").each(function () {
+                    var item = $(this).html();
+                    $("#showNotification").html(item);
+                });
+            });
+
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-default navbar-expand-lg navbar-light">
+                <div class="navbar-header d-flex col">
+                    <a class="navbar-brand" href="#">Brand<b>Name</b></a>
+                    <button type="button" data-target="#navbarCollapse" data-toggle="collapse"
+                        class="navbar-toggle navbar-toggler ml-auto">
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collection of nav links, forms, and other content for toggling -->
+                <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Services <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="dropdown-item">Web Design</a></li>
+                                <li><a href="#" class="dropdown-item">Web Development</a></li>
+                                <li><a href="#" class="dropdown-item">Graphic Design</a></li>
+                                <li><a href="#" class="dropdown-item">Digital Marketing</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item active"><a href="#" class="nav-link">Pricing</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                        <li class="nav-item dropdown">
+                            <a href="#" id="notificationLink" class="nav-link" id="navbarDropdownMenuLink" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell"></i>
+                            </a>
+                            <div id="notificationContainer" aria-labelledby="navbarDropdownMenuLink">
+                                <div id="notificationTitle">Notifications</div>
+                                <div id="notificationsBody" class="notifications" contenteditable="true"
+                                    spellcheck="false">
+
+
+                                </div>
+                                <div id="notificationFooter"><a href="#" class="fullNotifications">See All</a></div>
+                            </div>
+
+                        </li>
+                    </ul>
+                    <form class="navbar-form form-inline search-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="col-4" id="form">
+                    <br>
+                    <div class="form-group">
+                        <label for="usr">Name:</label>
+                        <input type="text" class="form-control" id="usr">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Add Comment</label>
+                        <textarea class="form-control " id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <button id="btn1" class="btn btn-success btn-sm" type="button">Comment</button>
+
+                </form>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Show Notifications</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="showNotification">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <div class="alert alert-danger" id="fieldsmatch" style="display:none;">
+            <strong>Error!</strong> Please Fill both fields!
+
+        </div>
+        <div class="alert alert-success" id="fieldsmatch1" style="display:none;">
+            <strong>Success!</strong> Notification sent!
+        </div>
+    </div>
+</body>
+
+</html>
