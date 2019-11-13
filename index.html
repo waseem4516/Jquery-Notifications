@@ -13,11 +13,80 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script>
-        var dt = new Date($.now());
-        var time = dt.toLocaleString();
+
+        var dt = new Date(Date.now());
+        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        (function timeAgo(selector) {
+
+            var templates = {
+                prefix: "",
+                suffix: " ago",
+                seconds: "less than a minute",
+                minute: "about a minute",
+                minutes: "%d minutes",
+                hour: "about an hour",
+                hours: "about %d hours",
+                day: "a day",
+                days: "%d days",
+                month: "about a month",
+                months: "%d months",
+                year: "about a year",
+                years: "%d years"
+            };
+            var template = function (t, n) {
+                return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+            };
+
+            var timer = function (time) {
+                if (!time)
+                    return;
+                time = time.replace(/\.\d+/, ""); // remove milliseconds
+                time = time.replace(/-/, "/").replace(/-/, "/");
+                time = time.replace(/T/, " ").replace(/Z/, " UTC");
+                time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
+                time = new Date(time * 1000 || time);
+
+                var now = new Date();
+                var seconds = ((now.getTime() - time) * .001) >> 0;
+                var minutes = seconds / 60;
+                var hours = minutes / 60;
+                var days = hours / 24;
+                var years = days / 365;
+
+                return templates.prefix + (
+                    seconds < 45 && template('seconds', seconds) ||
+                    seconds < 90 && template('minute', 1) ||
+                    minutes < 45 && template('minutes', minutes) ||
+                    minutes < 90 && template('hour', 1) ||
+                    hours < 24 && template('hours', hours) ||
+                    hours < 42 && template('day', 1) ||
+                    days < 30 && template('days', days) ||
+                    days < 45 && template('month', 1) ||
+                    days < 365 && template('months', days / 30) ||
+                    years < 1.5 && template('year', 1) ||
+                    template('years', years)
+                ) + templates.suffix;
+            };
+
+            var elements = document.getElementsByClassName('timeago');
+            for (var i in elements) {
+                var $this = elements[i];
+                if (typeof $this === 'object') {
+                    $this.innerHTML = timer($this.getAttribute('title') || $this.getAttribute('datetime'));
+                }
+            }
+            // update time every minute
+            setTimeout(timeAgo, 1000);
+
+        })();
         $(document).ready(function () {
+            $("li.addMore").map(function(d,i){
+                    var show = $(".timeago",this).attr("datetime");
+                     
+            });
             //For notification div for dropdown
             $("#notificationLink").click(function () {
                 $("#notificationContainer").fadeToggle(300);
@@ -54,23 +123,51 @@
                     myFunction1();
                     var message = $('#exampleFormControlTextarea1').val();
                     var name = $('#usr').val();
-                    var b = $(".notifications").prepend('<li class="addMore">' + name + '&nbsp;' + message + "<br>" + time + '</li>');
+                    //showing time of new prepended notification 
+                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="com timeago" datetime="'+new Date($.now())+'">' + '</span>' + '</li>');
                     $('#exampleFormControlTextarea1').val('');
                     $('#usr').val('');
 
                 }
+            });
+            $("#notificationsBody").on("click", ".addMore", function () {
+                $(this).each(function () {
+                    $(this).css('background-color', '#FFFFFF');
+                    // var item = $(this).css('background-color','#FFFFFF');
 
+                });
             });
             //show prepended each li of .addMore on individual click in a modal body 
             $("#notificationsBody").on("click", ".addMore", function () {
                 $('#exampleModal').modal('toggle');
                 $('#exampleModal').modal('show');
                 $('#exampleModal').modal('hide');
-
                 $(this).each(function () {
                     var item = $(this).html();
                     $("#showNotification").html(item);
                 });
+            });
+            //show prepended each li of .addMore on individual click in a modal body 
+            $("#notificationsBody").on("click", "#second", function () {
+                $('#exampleModal').modal('toggle');
+                $('#exampleModal').modal('show');
+                $('#exampleModal').modal('hide');
+                $("#second").each(function () {
+                    qty = $("#second").data("name");
+                    $("#showNotification").html(qty);
+
+                });
+
+            });
+            $("#notificationsBody").on("click", ".first", function () {
+                $('#exampleModal').modal('toggle');
+                $('#exampleModal').modal('show');
+                $('#exampleModal').modal('hide');
+                $(".first").each(function () {
+                    qty = $(".first").data("msg");
+                    $("#showNotification").html(qty);
+                });
+
             });
             // for showing all entered notifications in a modal box
             $(".fullNotifications").click(function (e) {
@@ -102,6 +199,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
+
                     </button>
                 </div>
                 <!-- Collection of nav links, forms, and other content for toggling -->
@@ -178,12 +276,16 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body" id="showNotification">
+                            <div class="text-center">
+                                <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
+                                <!-- <img src="admin-dashboard-bootstrap.jpg" alt="alternate" class="img-fluid"> -->
+                                <div class="modal-body" id="showNotification">
 
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                                <div class="modal-footer justify-content-center">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
                             </div>
                         </div>
                     </div>

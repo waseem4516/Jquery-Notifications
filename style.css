@@ -158,7 +158,7 @@ body{
 	}
 	#notificationsBody {
 		padding: 2px 0px 0px 0px !important;
-		min-height: 10px;
+		min-height: 220px;
 		overflow-y: scroll;
 		overflow-x: hidden;
 		max-height: 235px;
@@ -180,7 +180,35 @@ body{
 		background-color: #F5F6F7;
 		border-bottom: 1px solid #cac5c5;
 	}
-span.timeFor {
-	font-size: 5px;
-	color: aquamarine;
-}
+	#second {
+		font-weight:bolder;
+		
+	}
+	.com {
+		font-size: 14px;
+	}
+	span.timeFor {
+		font-size: 5px;
+		color: aquamarine;
+	}
+	.modal-header {
+		
+		background-color: #33B5E5 !important;
+	}
+	.text-center {
+		text-align: center!important;
+	}
+	.fa-4x {
+		font-size: 4em;
+	}
+	.rotateIn {
+		-webkit-animation-name: rotateIn;
+		animation-name: rotateIn;
+	}
+	.animated {
+		-webkit-animation-duration: 1s;
+		animation-duration: 1s;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+	}
+	
