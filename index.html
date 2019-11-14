@@ -16,9 +16,69 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script>
+        var currTime = new Date(); //Date.now();
+        var currTime1 = new Date().toLocaleTimeString();
+        currTime = currTime.toGMTString(); 
+        function timeSince (dateString) {
+        var rightNow = new Date();
+        var dd = new Date(dateString);
+        var gmtToLocal = dd.toLocaleString();
+        var then = new Date(gmtToLocal);
+        // var then = convertLocalDateToUTCDate(dateString, false);
 
-        var dt = new Date(Date.now());
-        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        var diff = Math.abs((rightNow.getTime() - then.getTime()) / 1000);
+        var second = 1,
+        minute = second * 60,
+        hour = minute * 60,
+        day = hour * 24,
+        week = day * 7;
+
+        if (isNaN(diff) || diff < 0) {
+        return ""; // return blank string if unknown
+        }
+
+        if (diff < second * 2) {
+        // within 2 seconds
+        return "right now";
+        }
+
+        if (diff < minute) {
+        return Math.floor(diff / second) + " seconds ago";
+        }
+
+        if (diff < minute * 2) {
+        return "about 1 minute ago";
+        }
+
+        if (diff < hour) {
+        return Math.floor(diff / minute) + " minutes ago";
+        }
+
+        if (diff < hour * 2) {
+        return "about 1 hour ago";
+        }
+
+        if (diff < day) { 
+        return Math.floor(diff / hour) + " hours ago"; 
+        } 
+        
+        if (diff > day && diff < day * 2) {
+        return "yesterday";
+        }
+
+        if (diff < day * 365) {
+        return Math.floor(diff / day) + " days ago";
+        }
+
+        else {
+        return "over a year ago";
+        }
+      
+            setInterval(timeSince, 3000);
+        }
+        
+        // var dt = new Date($.now());
+        // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
         (function timeAgo(selector) {
 
             var templates = {
@@ -74,19 +134,20 @@
             var elements = document.getElementsByClassName('timeago');
             for (var i in elements) {
                 var $this = elements[i];
-                if (typeof $this === 'object') {
+                if (typeof $this === 'object') 
+                {
                     $this.innerHTML = timer($this.getAttribute('title') || $this.getAttribute('datetime'));
                 }
             }
             // update time every minute
-            setTimeout(timeAgo, 1000);
+            setTimeout(timeAgo, 3000);
 
         })();
         $(document).ready(function () {
-            $("li.addMore").map(function(d,i){
-                    var show = $(".timeago",this).attr("datetime");
-                     
-            });
+            // $("li.addMore").map(function(d,i){
+            //         var show = $(".timeago",this).attr("datetime");
+            //          console.log(show);
+            // });
             //For notification div for dropdown
             $("#notificationLink").click(function () {
                 $("#notificationContainer").fadeToggle(300);
@@ -124,7 +185,7 @@
                     var message = $('#exampleFormControlTextarea1').val();
                     var name = $('#usr').val();
                     //showing time of new prepended notification 
-                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="com timeago" datetime="'+new Date($.now())+'">' + '</span>' + '</li>');
+                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="timeago" datetime="' +currTime+'">' +'</span>' + '</li>');
                     $('#exampleFormControlTextarea1').val('');
                     $('#usr').val('');
 
