@@ -192,7 +192,6 @@ body{
 		color: aquamarine;
 	}
 	.modal-header {
-		
 		background-color: #33B5E5 !important;
 	}
 	.text-center {
@@ -210,5 +209,6 @@ body{
 		animation-duration: 1s;
 		-webkit-animation-fill-mode: both;
 		animation-fill-mode: both;
+		color: #00c851;
 	}
 	
