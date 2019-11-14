@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="style.css">
     <script>
         var currTime = new Date(); //Date.now();
-        var currTime1 = new Date().toLocaleTimeString();
         currTime = currTime.toGMTString(); 
         function timeSince (dateString) {
         var rightNow = new Date();
@@ -77,8 +76,6 @@
             setInterval(timeSince, 3000);
         }
         
-        // var dt = new Date($.now());
-        // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
         (function timeAgo(selector) {
 
             var templates = {
@@ -185,7 +182,7 @@
                     var message = $('#exampleFormControlTextarea1').val();
                     var name = $('#usr').val();
                     //showing time of new prepended notification 
-                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="timeago" datetime="' +currTime+'">' +'</span>' + '</li>');
+                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="timeago" datetime="' +new Date($.now())+'">' +'</span>' + '</li>');
                     $('#exampleFormControlTextarea1').val('');
                     $('#usr').val('');
 
