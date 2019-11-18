@@ -158,10 +158,10 @@ body{
 	}
 	#notificationsBody {
 		padding: 2px 0px 0px 0px !important;
-		min-height: 220px;
+		min-height: 335px;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		max-height: 235px;
+		max-height: 300px;
 	
 	}
 	#notificationFooter {
@@ -211,4 +211,23 @@ body{
 		animation-fill-mode: both;
 		color: #00c851;
 	}
-	
+	#noti_Counter {
+        display:block;
+        position:absolute;
+        background:#29c68c;
+        color:#FFF;
+        font-size:12px;
+        font-weight:normal;
+        padding:1px 3px;
+        margin:-8px 0 0 22px;
+        border-radius:2px;
+        -moz-border-radius:2px; 
+        -webkit-border-radius:2px;
+        z-index:1;
+	}
+	.first {
+		font-size: 15px;
+	}
+	.post {
+		font-size:14px;
+	}

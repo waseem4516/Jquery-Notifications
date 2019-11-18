@@ -13,11 +13,16 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script>
-        var currTime = new Date(); //Date.now();
-        currTime = currTime.toGMTString(); 
+
+        // $("[class^=addMore]").map(function(index,element){
+        //     return $(".timeago",this).attr("datetime");
+                  
+        //    }).get();
+        
+        var currTime = Math.round(+new Date()/1000); //Date.now();
+        // currTime = currTime.toGMTString(); 
         (function timeAgo(selector) {
 
             var templates = {
@@ -79,10 +84,41 @@
                 }
             }
             // update time every minute
-            setTimeout(timeAgo, 3000);
+            setTimeout(timeAgo, 1500);
 
         })();
+        
         $(document).ready(function () {
+            $(".container *").attr("contentEditable", false)
+            $('#btn1').click(function() {
+            $('#noti_Counter').html(function(i, val) { return val*1+1 });   
+            $('<audio id="chatAudio"><source src="audios/notify.ogg" type="audio/ogg"><source src="audios/notify.mp3" type="audio/mpeg"><source src="audios/notify.wav" type="audio/wav"></audio>').appendTo('body');
+                $('#chatAudio')[0].play();    
+           
+        });
+            
+        // ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
+        $('#noti_Counter')
+            .css({ opacity: 0 })
+            .text('0')  // ADD DYNAMIC VALUE (YOU CAN EXTRACT DATA FROM DATABASE OR XML).
+            .css({ top: '-10px' })
+            .animate({ top: '10px', opacity: 1 }, 500);
+
+        $('#noti_Button').click(function () {
+
+            // TOGGLE (SHOW OR HIDE) NOTIFICATION WINDOW.
+            $('#notifications').fadeToggle('fast', 'linear', function () {
+                if ($('#notifications').is(':hidden')) {
+                    $('#noti_Button').css('background-color', '#2E467C');
+                }
+                // CHANGE BACKGROUND COLOR OF THE BUTTON.
+                else $('#noti_Button').css('background-color', '#FFF');
+            });
+
+            $('#noti_Counter').fadeOut('slow');     // HIDE THE COUNTER.
+
+            return false;
+        });
             // $("li.addMore").map(function(d,i){
             //         var show = $(".timeago",this).attr("datetime");
             //          console.log(show);
@@ -124,10 +160,12 @@
                     var message = $('#exampleFormControlTextarea1').val();
                     var name = $('#usr').val();
                     //showing time of new prepended notification 
-                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' + '<span class="timeago" datetime="' +new Date($.now())+'">' +'</span>' + '</li>');
+                    var b = $(".notifications").prepend('<li class="addMore"><div id="second" data-name="' + name + '">' + name + '</div><div class="first" data-msg="' + message + '">' + message + '</div>' +"<small class='text-muted'>just now </small>" +'<span class="timeago com" datetime="'+Math.round(+new Date()/1000)+'">' +'</span>' + '</li>');
                     $('#exampleFormControlTextarea1').val('');
                     $('#usr').val('');
-
+                    $('.text-muted').delay(1000).fadeOut("fast",function(){
+                        $(".timeago").show();
+                    });
                 }
             });
             $("#notificationsBody").on("click", ".addMore", function () {
@@ -146,6 +184,8 @@
                     var item = $(this).html();
                     $("#showNotification").html(item);
                 });
+                
+               $('#noti_Counter').html(function(i, val) { return val*1-1 });
             });
             //show prepended each li of .addMore on individual click in a modal body 
             $("#notificationsBody").on("click", "#second", function () {
@@ -180,6 +220,7 @@
                     $("#showNotification").html(item);
                 });
             });
+            
 
         });
 
@@ -223,6 +264,7 @@
                         <li class="nav-item dropdown">
                             <a href="#" id="notificationLink" class="nav-link" id="navbarDropdownMenuLink" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div id="noti_Counter"></div>
                                 <i class="fa fa-bell"></i>
                             </a>
                             <div id="notificationContainer" aria-labelledby="navbarDropdownMenuLink">
@@ -302,6 +344,7 @@
             <strong>Success!</strong> Notification sent!
         </div>
     </div>
+
 </body>
 
 </html>
